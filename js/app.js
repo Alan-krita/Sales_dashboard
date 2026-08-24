@@ -1,70 +1,7 @@
-// CONFIGURATION: Supabase URL and Anon Key
-let SUPABASE_URL = "https://pkwoweaiztetzasqukip.supabase.co";
-let SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBrd293ZWFpenRldHphc3F1a2lwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM4Mjc2MjQsImV4cCI6MjA5OTQwMzYyNH0.ZY4g45X8YvPhu5y6D5MXHnglD3Obx9jMllMaVLX45ck";
-let TABLE_NAME = "orders";
+/* global SUPABASE_URL:true, SUPABASE_ANON_KEY:true, TABLE_NAME:true, isLiveMode:true, currentDataset:true, filteredDataset:true, selectedMonthFilter:true, USER_NAME_MAP, resolveRepName, getTeacherDemoData */
 
 let dailyChartInstance = null;
 let monthlyChartInstance = null;
-let walletChartInstance = null;
-
-let currentDataset = [];
-let filteredDataset = [];
-let isLiveMode = true; // Default to Live Supabase data
-let selectedMonthFilter = "June 2026"; // Default active month
-
-// User ID to Sales Rep Name lookup dictionary
-const USER_NAME_MAP = {
-  1001: "Faizan",
-  1002: "Talha",
-  1003: "Nidhi",
-  1004: "Bhageshri",
-  1005: "Sanika",
-  1006: "Prabhat",
-  1007: "Farooq",
-  1008: "Aarav",
-  1009: "Rhea",
-  1010: "Ananya",
-  1911: "Faizan",
-  1912: "Talha",
-  1913: "Nidhi",
-  1914: "Faizan",
-  1915: "Sanika",
-  1916: "Prabhat",
-  1917: "Bhageshri",
-  1943: "Faizan",
-  1944: "Talha",
-  1945: "Nidhi",
-  1946: "Faizan",
-  1947: "Sanika",
-  1948: "Prabhat",
-  1949: "Bhageshri"
-};
-
-// Resolves numeric user/creator IDs to human Sales Rep Names
-function resolveRepName(item) {
-  if (!item) return "Sales Rep";
-
-  let val = item.created_by;
-  if (!val || val === "") val = item.user_id;
-
-  // Direct map lookup
-  if (USER_NAME_MAP[val]) return USER_NAME_MAP[val];
-  if (USER_NAME_MAP[item.user_id]) return USER_NAME_MAP[item.user_id];
-
-  // If string name already (e.g. "Faizan")
-  if (typeof val === "string" && isNaN(Number(val)) && val.trim().length > 0 && !val.startsWith("User_")) {
-    return val.trim();
-  }
-
-  // Fallback for numeric IDs: deterministically map to names array
-  if (typeof val === "number" || !isNaN(Number(val))) {
-    const idNum = Math.abs(Number(val));
-    const names = ["Faizan", "Talha", "Nidhi", "Bhageshri", "Sanika", "Prabhat", "Farooq", "Aarav", "Rhea", "Ananya"];
-    return names[idNum % names.length];
-  }
-
-  return String(val);
-}
 
 document.addEventListener("DOMContentLoaded", () => {
   setupEventListeners();
@@ -109,7 +46,7 @@ function showToast(message, type = "success") {
 
 // Event Listeners Wire-up
 function setupEventListeners() {
-  // 1. Mobile Menu Open
+
   const mobileMenuBtn = document.getElementById("mobile-menu-btn");
   const sidebar = document.getElementById("sidebar");
   if (mobileMenuBtn && sidebar) {
@@ -118,7 +55,6 @@ function setupEventListeners() {
     });
   }
 
-  // 2. Mobile Menu Close
   const mobileCloseBtn = document.getElementById("mobile-sidebar-close-btn");
   if (mobileCloseBtn && sidebar) {
     mobileCloseBtn.addEventListener("click", () => {
@@ -135,7 +71,6 @@ function setupEventListeners() {
     });
   });
 
-  // 3. Refresh Button
   const refreshBtn = document.getElementById("refresh-btn");
   if (refreshBtn) {
     refreshBtn.addEventListener("click", () => {
@@ -151,7 +86,6 @@ function setupEventListeners() {
     });
   }
 
-  // 4. Live/Demo Mode Switcher
   const modeBtn = document.getElementById("mode-toggle-btn");
   if (modeBtn) {
     modeBtn.addEventListener("click", () => {
@@ -165,7 +99,6 @@ function setupEventListeners() {
     });
   }
 
-  // 5. Download CSV
   const csvBtn = document.getElementById("download-csv-btn");
   if (csvBtn) {
     csvBtn.addEventListener("click", () => {
@@ -174,7 +107,6 @@ function setupEventListeners() {
     });
   }
 
-  // 6. Fullscreen Mode Toggle
   const fullscreenBtn = document.getElementById("fullscreen-btn");
   if (fullscreenBtn) {
     fullscreenBtn.addEventListener("click", () => {
@@ -190,7 +122,6 @@ function setupEventListeners() {
     });
   }
 
-  // 7. Global Search Filter
   const searchInput = document.getElementById("global-search-input");
   if (searchInput) {
     searchInput.addEventListener("input", (e) => {
@@ -199,7 +130,6 @@ function setupEventListeners() {
     });
   }
 
-  // 8. Filter Pills (All Records vs Top Performers)
   const filterAll = document.getElementById("filter-all");
   const filterTarget = document.getElementById("filter-target");
   if (filterAll && filterTarget) {
@@ -216,7 +146,6 @@ function setupEventListeners() {
     });
   }
 
-  // 9. June 2026 Month Picker Dropdown
   const monthPickerBtn = document.getElementById("month-picker-btn");
   const monthDropdownMenu = document.getElementById("month-dropdown-menu");
   if (monthPickerBtn && monthDropdownMenu) {
@@ -250,25 +179,28 @@ function setupEventListeners() {
     });
   }
 
-  // 10. New Transaction Modal Handlers
-  const addSaleBtn = document.getElementById("add-sale-btn");
-  const newSaleModal = document.getElementById("new-sale-modal");
-  const closeModal = document.getElementById("close-modal");
-  const cancelModal = document.getElementById("cancel-modal");
-  const newSaleForm = document.getElementById("new-sale-form");
-
-  if (addSaleBtn && newSaleModal) {
-    addSaleBtn.addEventListener("click", () => {
-      newSaleModal.classList.add("active");
-    });
-  }
-
-  const hideModal = () => {
-    if (newSaleModal) newSaleModal.classList.remove("active");
+  // Helper to setup modals
+  const setupModal = (openBtnId, modalId, closeBtnId, cancelBtnId, onOpen = null) => {
+    const openBtn = document.getElementById(openBtnId);
+    const modal = document.getElementById(modalId);
+    const closeBtn = document.getElementById(closeBtnId);
+    const cancelBtn = document.getElementById(cancelBtnId);
+    
+    if (openBtn && modal) {
+      openBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        if (onOpen) onOpen();
+        modal.classList.add("active");
+      });
+    }
+    const hide = () => { if (modal) modal.classList.remove("active"); };
+    if (closeBtn) closeBtn.addEventListener("click", hide);
+    if (cancelBtn) cancelBtn.addEventListener("click", hide);
+    return hide;
   };
 
-  if (closeModal) closeModal.addEventListener("click", hideModal);
-  if (cancelModal) cancelModal.addEventListener("click", hideModal);
+  const hideNewSaleModal = setupModal("add-sale-btn", "new-sale-modal", "close-modal", "cancel-modal");
+  const newSaleForm = document.getElementById("new-sale-form");
 
   if (newSaleForm) {
     newSaleForm.addEventListener("submit", (e) => {
@@ -294,105 +226,15 @@ function setupEventListeners() {
       updateDashboardUI(filteredDataset, isLiveMode ? "Live Supabase + Simulated Record" : "Connected (Demo Mode)");
       
       newSaleForm.reset();
-      hideModal();
+      hideNewSaleModal();
       showToast(`Sale simulated successfully! Order #${newRecord.order_no} created.`, "success");
     });
   }
 
-  // 11. API Config Modal Wire-up
-  const openSettingsBtn = document.getElementById("open-settings-btn");
-  const apiConfigModal = document.getElementById("api-config-modal");
-  const closeApiModal = document.getElementById("close-api-modal");
-  const cancelApiModal = document.getElementById("cancel-api-modal");
-  const apiConfigForm = document.getElementById("api-config-form");
-  const testApiBtn = document.getElementById("test-api-btn");
-  const testResultBox = document.getElementById("test-result-box");
 
-  if (openSettingsBtn && apiConfigModal) {
-    openSettingsBtn.addEventListener("click", (e) => {
-      e.preventDefault();
-      document.getElementById("cfg-supabase-url").value = SUPABASE_URL;
-      document.getElementById("cfg-supabase-key").value = SUPABASE_ANON_KEY;
-      document.getElementById("cfg-table-name").value = TABLE_NAME;
-      if (testResultBox) testResultBox.style.display = "none";
-      apiConfigModal.classList.add("active");
-    });
-  }
 
-  const hideApiModal = () => {
-    if (apiConfigModal) apiConfigModal.classList.remove("active");
-  };
-
-  if (closeApiModal) closeApiModal.addEventListener("click", hideApiModal);
-  if (cancelApiModal) cancelApiModal.addEventListener("click", hideApiModal);
-
-  if (testApiBtn) {
-    testApiBtn.addEventListener("click", async () => {
-      const url = document.getElementById("cfg-supabase-url").value.trim();
-      const key = document.getElementById("cfg-supabase-key").value.trim();
-      const tbl = document.getElementById("cfg-table-name").value.trim();
-
-      testApiBtn.innerHTML = `<i class="fa-solid fa-spinner spinning"></i> Testing...`;
-      testResultBox.style.display = "none";
-
-      const start = Date.now();
-      try {
-        const res = await fetch(`${url}/rest/v1/${tbl}?select=count`, {
-          method: "GET",
-          headers: { "apikey": key, "Authorization": `Bearer ${key}` }
-        });
-        const duration = Date.now() - start;
-
-        if (res.ok) {
-          testResultBox.className = "test-result-box success";
-          testResultBox.innerText = `Connection Successful! Status 200 OK (${duration}ms)`;
-        } else {
-          testResultBox.className = "test-result-box error";
-          testResultBox.innerText = `Connection Failed: HTTP ${res.status} ${res.statusText}`;
-        }
-      } catch (err) {
-        testResultBox.className = "test-result-box error";
-        testResultBox.innerText = `Connection Error: ${err.message}`;
-      } finally {
-        testApiBtn.innerHTML = `<i class="fa-solid fa-bolt"></i> Test Connection`;
-      }
-    });
-  }
-
-  if (apiConfigForm) {
-    apiConfigForm.addEventListener("submit", (e) => {
-      e.preventDefault();
-      SUPABASE_URL = document.getElementById("cfg-supabase-url").value.trim();
-      SUPABASE_ANON_KEY = document.getElementById("cfg-supabase-key").value.trim();
-      TABLE_NAME = document.getElementById("cfg-table-name").value.trim();
-
-      hideApiModal();
-      showToast("API configuration saved successfully! Re-connecting...", "success");
-      isLiveMode = true;
-      fetchDashboardData();
-    });
-  }
-
-  // 12. Log Out Modal Wire-up
-  const logoutBtn = document.getElementById("logout-btn");
-  const logoutModal = document.getElementById("logout-modal");
-  const closeLogoutModal = document.getElementById("close-logout-modal");
-  const cancelLogoutBtn = document.getElementById("cancel-logout-btn");
+  const hideLogoutModal = setupModal("logout-btn", "logout-modal", "close-logout-modal", "cancel-logout-btn");
   const confirmLogoutBtn = document.getElementById("confirm-logout-btn");
-
-  if (logoutBtn && logoutModal) {
-    logoutBtn.addEventListener("click", (e) => {
-      e.preventDefault();
-      logoutModal.classList.add("active");
-    });
-  }
-
-  const hideLogoutModal = () => {
-    if (logoutModal) logoutModal.classList.remove("active");
-  };
-
-  if (closeLogoutModal) closeLogoutModal.addEventListener("click", hideLogoutModal);
-  if (cancelLogoutBtn) cancelLogoutBtn.addEventListener("click", hideLogoutModal);
 
   if (confirmLogoutBtn) {
     confirmLogoutBtn.addEventListener("click", () => {
@@ -404,7 +246,6 @@ function setupEventListeners() {
     });
   }
 
-  // 13. Chart Period buttons
   document.querySelectorAll(".chart-period-btn").forEach(btn => {
     btn.addEventListener("click", (e) => {
       document.querySelectorAll(".chart-period-btn").forEach(b => b.classList.remove("active"));
@@ -414,7 +255,6 @@ function setupEventListeners() {
     });
   });
 
-  // 14. Chart Type buttons
   const btnLine = document.getElementById("btn-chart-line");
   const btnBar = document.getElementById("btn-chart-bar");
   if (btnLine && btnBar) {
@@ -430,21 +270,6 @@ function setupEventListeners() {
     });
   }
 
-  // 15. Wallet Summary nav item — scroll to section
-  const navWallet = document.getElementById("nav-wallet");
-  if (navWallet) {
-    navWallet.addEventListener("click", (e) => {
-      e.preventDefault();
-      const walletSection = document.getElementById("wallet-section");
-      if (walletSection) {
-        walletSection.scrollIntoView({ behavior: "smooth" });
-      }
-      document.querySelectorAll(".nav-item").forEach(n => n.classList.remove("active"));
-      navWallet.classList.add("active");
-    });
-  }
-
-  // 16. Sidebar Collapse Toggle (desktop)
   const collapseBtn = document.getElementById("sidebar-collapse-btn");
   const appLayout = document.querySelector(".app-layout");
   const sidebarEl = document.getElementById("sidebar");
@@ -578,7 +403,7 @@ function updateDashboardUI(data, statusMessage) {
   renderDailyChart(data);
   renderMonthlyChart(data);
   renderSparklines();
-  renderWalletSummary(data);
+
 }
 
 // Renders mini sparklines
@@ -968,87 +793,3 @@ function getTeacherDemoData() {
   ];
 }
 
-// ===== WALLET SUMMARY ====
-function renderWalletSummary(data) {
-  if (!data || data.length === 0) return;
-
-  const totalRevenue = data.reduce((s, r) => s + (parseFloat(r.amount) || 0), 0);
-  const totalDiscount = data.reduce((s, r) => s + (parseFloat(r.discount_amount) || 0), 0);
-  const avgOrder = totalRevenue / data.length;
-
-  const set = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
-  set("w-total-revenue", `₹${(totalRevenue / 1000).toFixed(2)}K`);
-  set("w-total-orders", data.length);
-  set("w-total-discounts", `₹${(totalDiscount / 1000).toFixed(2)}K`);
-  set("w-avg-order", `₹${avgOrder.toFixed(2)}`);
-
-  const repMap = {};
-  data.forEach(r => {
-    const rep = resolveRepName(r);
-    if (!repMap[rep]) repMap[rep] = { revenue: 0, discount: 0, count: 0 };
-    repMap[rep].revenue += parseFloat(r.amount) || 0;
-    repMap[rep].discount += parseFloat(r.discount_amount) || 0;
-    repMap[rep].count += 1;
-  });
-
-  const reps = Object.entries(repMap).sort((a, b) => b[1].revenue - a[1].revenue).slice(0, 8);
-
-  // Revenue Breakdown Bar Chart
-  const canvas = document.getElementById("walletRepChart");
-  if (canvas) {
-    if (walletChartInstance) { walletChartInstance.destroy(); walletChartInstance = null; }
-
-    const labels = reps.map(([rep]) => rep);
-    const revenues = reps.map(([, v]) => parseFloat(v.revenue.toFixed(2)));
-    const discounts = reps.map(([, v]) => parseFloat(v.discount.toFixed(2)));
-
-    walletChartInstance = new Chart(canvas.getContext("2d"), {
-      type: "bar",
-      data: {
-        labels,
-        datasets: [
-          {
-            label: "Revenue (₹)",
-            data: revenues,
-            backgroundColor: "rgba(59,130,246,0.7)",
-            borderRadius: 6,
-            borderSkipped: false
-          },
-          {
-            label: "Discount (₹)",
-            data: discounts,
-            backgroundColor: "rgba(249,87,0,0.6)",
-            borderRadius: 6,
-            borderSkipped: false
-          }
-        ]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          legend: { labels: { color: "#94a3b8", font: { size: 11 } } },
-          tooltip: { callbacks: { label: ctx => ` ₹${ctx.raw.toLocaleString()}` } }
-        },
-        scales: {
-          x: { ticks: { color: "#64748b", font: { size: 10 } }, grid: { color: "rgba(255,255,255,0.04)" } },
-          y: { ticks: { color: "#64748b", font: { size: 10 }, callback: v => `₹${(v/1000).toFixed(1)}K` }, grid: { color: "rgba(255,255,255,0.06)" } }
-        }
-      }
-    });
-  }
-
-  // Discount vs Revenue table
-  const tbody = document.getElementById("wallet-rep-table");
-  if (tbody) {
-    tbody.innerHTML = reps.map(([rep, v]) => {
-      const net = v.revenue - v.discount;
-      return `<tr>
-        <td><strong style="color:#e2e8f0">${rep}</strong></td>
-        <td style="color:#3b82f6">₹${v.revenue.toLocaleString("en-IN", {maximumFractionDigits:0})}</td>
-        <td style="color:#f95700">₹${v.discount.toLocaleString("en-IN", {maximumFractionDigits:0})}</td>
-        <td style="color:#10b981;font-weight:700">₹${net.toLocaleString("en-IN", {maximumFractionDigits:0})}</td>
-      </tr>`;
-    }).join("");
-  }
-}

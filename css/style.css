@@ -1,4 +1,4 @@
-/* G.TAKE Ultra Dark Glassmorphism Styling System */
+
 :root {
   --bg-dark: #080c14;
   --bg-sidebar: #0e1422;
@@ -50,7 +50,6 @@ body {
   overflow-x: hidden;
 }
 
-/* Toast Notifications */
 .toast-container {
   position: fixed;
   top: 20px;
@@ -86,13 +85,11 @@ body {
   to { transform: translateX(0); opacity: 1; }
 }
 
-/* App Layout Grid */
 .app-layout {
   display: flex;
   min-height: 100vh;
 }
 
-/* Left Sidebar */
 .sidebar {
   width: 250px;
   background: var(--bg-sidebar);
@@ -110,7 +107,6 @@ body {
   transition: width 0.3s ease, transform 0.3s ease;
 }
 
-/* Collapsed state */
 .sidebar.collapsed {
   width: 64px;
   padding: 24px 8px;
@@ -142,7 +138,6 @@ body {
   align-items: center;
 }
 
-/* Collapse toggle button */
 .sidebar-collapse-btn {
   display: flex;
   align-items: center;
@@ -307,7 +302,6 @@ body {
   padding-top: 16px;
 }
 
-/* Main Wrapper */
 .main-wrapper {
   margin-left: 250px;
   flex: 1;
@@ -318,13 +312,11 @@ body {
   transition: margin-left 0.3s ease, width 0.3s ease;
 }
 
-/* When sidebar is collapsed */
 .app-layout.sidebar-collapsed .main-wrapper {
   margin-left: 64px;
   width: calc(100vw - 64px);
 }
 
-/* Top Navigation Bar */
 .top-bar {
   display: flex;
   justify-content: space-between;
@@ -352,7 +344,6 @@ body {
   overflow: visible;
 }
 
-/* Search Box */
 .search-box {
   display: flex;
   align-items: center;
@@ -382,7 +373,6 @@ body {
   width: 100%;
 }
 
-/* Status Pill */
 .status-pill {
   display: flex;
   align-items: center;
@@ -413,7 +403,6 @@ body {
   border-radius: 6px;
 }
 
-/* Records Badge */
 .records-badge {
   font-size: 0.8rem;
   color: var(--text-secondary);
@@ -492,7 +481,6 @@ body {
   box-shadow: 0 6px 20px var(--accent-orange-glow);
 }
 
-/* Spin animation */
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
@@ -500,7 +488,6 @@ body {
 
 .spinning { animation: spin 0.8s linear infinite; }
 
-/* Hero Section */
 .hero-section {
   display: flex;
   justify-content: space-between;
@@ -518,7 +505,9 @@ body {
   gap: 12px;
   background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 100%);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
+  color: transparent;
 }
 
 .live-pulse-badge {
@@ -532,6 +521,7 @@ body {
   align-items: center;
   gap: 6px;
   -webkit-text-fill-color: initial;
+  color: initial;
 }
 
 .live-pulse-badge i { font-size: 0.5rem; animation: pulse 1.5s infinite; }
@@ -585,7 +575,6 @@ body {
 .pill .dot.green { background: var(--accent-green); box-shadow: 0 0 8px var(--accent-green); }
 .pill .dot.orange { background: var(--accent-orange); box-shadow: 0 0 8px var(--accent-orange); }
 
-/* Month Picker Dropdown */
 .month-picker-container {
   position: relative;
 }
@@ -629,7 +618,6 @@ body {
   font-weight: 600;
 }
 
-/* Glass Card Component */
 .card {
   background: var(--card-glass-bg);
   backdrop-filter: blur(20px);
@@ -640,7 +628,6 @@ body {
   box-shadow: var(--shadow-main);
 }
 
-/* KPI Cards Grid */
 .performance-cards-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -728,7 +715,6 @@ body {
   width: 100%;
 }
 
-/* Section Header */
 .section-header {
   display: flex;
   justify-content: space-between;
@@ -761,7 +747,6 @@ body {
 
 .widget-sub { font-size: 0.78rem; color: var(--text-muted); }
 
-/* Middle Grid */
 .middle-grid {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 340px;
@@ -769,7 +754,6 @@ body {
   margin-bottom: 24px;
 }
 
-/* Table Section */
 .table-wrapper {
   overflow-x: auto;
   max-height: 380px;
@@ -833,7 +817,6 @@ tr:hover td { background: rgba(59, 130, 246, 0.08); }
   box-shadow: 0 0 10px var(--accent-blue-glow);
 }
 
-/* Progress bar container */
 .target-progress-container {
   display: flex;
   align-items: center;
@@ -862,7 +845,6 @@ tr:hover td { background: rgba(59, 130, 246, 0.08); }
   color: white;
 }
 
-/* Top Destinations Widget */
 .destinations-list {
   display: flex;
   flex-direction: column;
@@ -917,7 +899,6 @@ tr:hover td { background: rgba(59, 130, 246, 0.08); }
   border-radius: 12px;
 }
 
-/* Bottom Grid: Dual Charts */
 .charts-grid {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
@@ -953,7 +934,6 @@ tr:hover td { background: rgba(59, 130, 246, 0.08); }
   border-color: transparent;
 }
 
-/* Modal Overlay */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -1151,7 +1131,6 @@ tr:hover td { background: rgba(59, 130, 246, 0.08); }
   border: 1px solid rgba(239, 68, 68, 0.3);
 }
 
-/* Mobile Header Style */
 .mobile-header {
   display: none;
   position: fixed;
@@ -1205,7 +1184,6 @@ tr:hover td { background: rgba(59, 130, 246, 0.08); }
   color: white;
 }
 
-/* Responsive Rules */
 @media (max-width: 1200px) {
   .performance-cards-grid { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
   .middle-grid { grid-template-columns: 1fr; }
@@ -1283,67 +1261,3 @@ tr:hover td { background: rgba(59, 130, 246, 0.08); }
   }
 }
 
-/* ===== WALLET SUMMARY SECTION ===== */
-.wallet-section {
-  margin-top: 28px;
-  padding-bottom: 40px;
-}
-
-.wallet-kpis {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 16px;
-  margin-bottom: 24px;
-}
-
-.wallet-kpi-card {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  padding: 18px 20px;
-  border-radius: var(--radius-lg);
-  transition: var(--transition-fast);
-}
-
-.wallet-kpi-card:hover {
-  transform: translateY(-3px);
-}
-
-.wallet-icon {
-  width: 46px;
-  height: 46px;
-  border-radius: 14px;
-  border: 1px solid;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.1rem;
-  flex-shrink: 0;
-}
-
-.wallet-label {
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: var(--text-secondary);
-  text-transform: uppercase;
-  letter-spacing: 0.4px;
-  margin-bottom: 4px;
-}
-
-.wallet-value {
-  font-size: 1.5rem;
-  font-weight: 800;
-  color: white;
-  line-height: 1;
-}
-
-.wallet-grid {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  gap: 24px;
-}
-
-@media (max-width: 1000px) {
-  .wallet-grid { grid-template-columns: 1fr; }
-  .wallet-kpis { grid-template-columns: repeat(2, 1fr); }
-}

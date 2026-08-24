@@ -5,25 +5,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>VOYX Ultra | Sales & Analytics Dashboard</title>
 
-  <!-- Google Fonts: Plus Jakarta Sans & Inter -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-  
-  <!-- Font Awesome Icons -->
+
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <link rel="stylesheet" href="css/style.css">
-  
-  <!-- Chart.js Library via CDN -->
+
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 
-  <!-- Toast Notification Container -->
   <div id="toast-container" class="toast-container"></div>
 
-  <!-- Mobile Header Bar -->
   <div class="mobile-header">
     <button id="mobile-menu-btn" class="mobile-menu-btn">
       <i class="fa-solid fa-bars"></i>
@@ -35,7 +30,7 @@
   </div>
 
   <div class="app-layout">
-    <!-- Left Sidebar (G.TAKE Ultra Style) -->
+    
     <aside class="sidebar" id="sidebar">
       <div class="brand">
         <div class="brand-logo">
@@ -45,7 +40,6 @@
         <button id="mobile-sidebar-close-btn" class="mobile-sidebar-close-btn">&times;</button>
       </div>
 
-      <!-- Desktop Collapse Toggle -->
       <button id="sidebar-collapse-btn" class="sidebar-collapse-btn" title="Collapse sidebar">
         <i class="fa-solid fa-chevron-left" id="collapse-icon"></i>
       </button>
@@ -67,13 +61,9 @@
           <div class="nav-icon"><i class="fa-solid fa-plane-departure"></i></div>
           <span class="sidebar-text">Destinations</span>
         </a>
-        <a href="#wallet-section" class="nav-item" id="nav-wallet" data-section="wallet">
-          <div class="nav-icon"><i class="fa-solid fa-credit-card"></i></div>
-          <span class="sidebar-text">Wallet Summary</span>
-        </a>
+
       </nav>
 
-      <!-- Quick Action Button inside Sidebar -->
       <div class="sidebar-action">
         <button id="add-sale-btn" class="sidebar-g-btn">
           <i class="fa-solid fa-circle-plus"></i> <span class="sidebar-text">New Transaction</span>
@@ -81,10 +71,7 @@
       </div>
 
       <div class="sidebar-footer">
-        <a href="#" class="nav-item" id="open-settings-btn">
-          <div class="nav-icon"><i class="fa-solid fa-sliders"></i></div>
-          <span class="sidebar-text">API Config</span>
-        </a>
+
         <a href="#" class="nav-item" id="logout-btn">
           <div class="nav-icon"><i class="fa-solid fa-right-from-bracket"></i></div>
           <span class="sidebar-text">Log out</span>
@@ -92,60 +79,50 @@
       </div>
     </aside>
 
-    <!-- Main Workspace Area -->
     <main class="main-wrapper">
-      
-      <!-- Top Navigation Bar (G.TAKE Header) -->
+
       <header class="top-bar">
-        <!-- Row 1: Breadcrumb left, actions right -->
+        
         <div class="breadcrumbs">
           <i class="fa-solid fa-house-chimney"></i> Home <span>/</span> Dashboard <span>/</span>
           <i class="fa-regular fa-clock"></i> <span id="live-clock">--:--:--</span>
         </div>
 
         <div class="header-right">
-          <!-- Connection Status Pill (compact) -->
+          
           <div class="status-pill">
             <span class="status-dot"></span>
             <span id="api-status">Connecting...</span>
             <span class="ping-badge" id="ping-badge">--ms</span>
           </div>
 
-          <!-- Total Records Badge -->
           <div class="records-badge">
             <i class="fa-solid fa-database"></i> <strong id="total-count">0</strong>
           </div>
 
-          <!-- Mode Toggle Button -->
           <button id="mode-toggle-btn" class="action-btn mode-btn" title="Toggle Live Supabase / Demo Mode">
             <i class="fa-solid fa-server"></i> <span id="mode-text" class="btn-label">Live</span>
           </button>
 
-          <!-- Refresh Button -->
           <button id="refresh-btn" class="action-btn refresh-btn" title="Refresh data">
             <i class="fa-solid fa-arrows-rotate" id="refresh-icon"></i>
           </button>
 
-          <!-- Download CSV Button -->
           <button id="download-csv-btn" class="action-btn csv-btn" title="Download CSV">
             <i class="fa-solid fa-download"></i>
           </button>
 
-          <!-- Search Bar with Live Filter -->
           <div class="search-box">
             <i class="fa-solid fa-magnifying-glass"></i>
             <input type="text" id="global-search-input" placeholder="Search...">
           </div>
 
-          <!-- Fullscreen Button -->
           <button id="fullscreen-btn" class="action-btn icon-only-btn" title="Toggle Fullscreen">
             <i class="fa-solid fa-expand"></i>
           </button>
         </div>
       </header>
 
-
-      <!-- Dashboard Hero Banner -->
       <section class="hero-section">
         <div class="hero-content">
           <h1>Voyx Sales & Analytics Dashboard <span class="live-pulse-badge"><i class="fa-solid fa-circle"></i> LIVE STREAM</span></h1>
@@ -160,10 +137,8 @@
         </div>
       </section>
 
-      <!-- Top Performance Cards (4 G.TAKE Dark Glass Cards + Micro Sparklines) -->
       <section class="performance-cards-grid">
-        
-        <!-- Card 1: Today Performance (Glowing Glass Card) -->
+
         <div class="card kpi-card glowing-border">
           <div class="kpi-top">
             <div class="kpi-icon"><i class="fa-solid fa-bolt"></i></div>
@@ -182,7 +157,6 @@
           </div>
         </div>
 
-        <!-- Card 2: June MTD -->
         <div class="card kpi-card">
           <div class="kpi-top">
             <div class="kpi-icon blue-icon"><i class="fa-solid fa-chart-column"></i></div>
@@ -198,7 +172,6 @@
           </div>
         </div>
 
-        <!-- Card 3: Prev Month (Same Day) -->
         <div class="card kpi-card">
           <div class="kpi-top">
             <div class="kpi-icon grey-icon"><i class="fa-solid fa-clock-rotate-left"></i></div>
@@ -214,7 +187,6 @@
           </div>
         </div>
 
-        <!-- Card 4: Prev Month -->
         <div class="card kpi-card">
           <div class="kpi-top">
             <div class="kpi-icon purple-icon"><i class="fa-regular fa-calendar-check"></i></div>
@@ -232,10 +204,8 @@
 
       </section>
 
-      <!-- Middle Grid: Daily Leaderboard Table & Top Destinations Widget -->
       <section class="middle-grid" id="leaderboard-section">
-        
-        <!-- Daily Leaderboard Panel -->
+
         <div class="card content-card leaderboard-panel">
           <div class="section-header">
             <h2><i class="fa-solid fa-trophy"></i> DAILY LEADERBOARD</h2>
@@ -252,7 +222,6 @@
           </div>
         </div>
 
-        <!-- Top Destinations Widget Panel (G.TAKE Dark Glass Widget) -->
         <div class="card content-card destinations-panel" id="destinations-section">
           <div class="section-header">
             <h2><i class="fa-solid fa-plane-departure"></i> TOP DESTINATIONS</h2>
@@ -260,16 +229,14 @@
           </div>
 
           <div class="destinations-list" id="destinations-list">
-            <!-- Populated by JavaScript -->
+            
           </div>
         </div>
 
       </section>
 
-      <!-- Bottom Grid: Dual Summary Line Charts + Time Range Selector -->
       <section class="charts-grid" id="charts-section">
-        
-        <!-- Daily Summary Chart Card -->
+
         <div class="card content-card chart-card">
           <div class="section-header">
             <h2><i class="fa-solid fa-chart-line"></i> DAILY SUMMARY</h2>
@@ -283,7 +250,6 @@
           </div>
         </div>
 
-        <!-- Monthly Summary Chart Card -->
         <div class="card content-card chart-card">
           <div class="section-header">
             <h2><i class="fa-solid fa-chart-area"></i> MONTHLY SUMMARY</h2>
@@ -299,93 +265,9 @@
 
       </section>
 
-      <!-- WALLET SUMMARY SECTION -->
-      <section class="wallet-section" id="wallet-section">
-        <div class="section-header" style="margin-bottom: 20px;">
-          <h2 style="font-size:1.2rem;"><i class="fa-solid fa-credit-card"></i> WALLET SUMMARY</h2>
-          <span class="badge-tag"><i class="fa-solid fa-circle"></i> Financial Overview</span>
-        </div>
-
-        <!-- Wallet KPI Row -->
-        <div class="wallet-kpis">
-          <div class="card wallet-kpi-card">
-            <div class="wallet-icon" style="background:rgba(249,87,0,.15);border-color:rgba(249,87,0,.3);color:#f95700;">
-              <i class="fa-solid fa-indian-rupee-sign"></i>
-            </div>
-            <div>
-              <p class="wallet-label">Total Revenue (MTD)</p>
-              <p class="wallet-value" id="w-total-revenue">₹0.00K</p>
-            </div>
-          </div>
-          <div class="card wallet-kpi-card">
-            <div class="wallet-icon" style="background:rgba(59,130,246,.15);border-color:rgba(59,130,246,.3);color:#3b82f6;">
-              <i class="fa-solid fa-receipt"></i>
-            </div>
-            <div>
-              <p class="wallet-label">Total Orders</p>
-              <p class="wallet-value" id="w-total-orders">0</p>
-            </div>
-          </div>
-          <div class="card wallet-kpi-card">
-            <div class="wallet-icon" style="background:rgba(168,85,247,.15);border-color:rgba(168,85,247,.3);color:#a855f7;">
-              <i class="fa-solid fa-tags"></i>
-            </div>
-            <div>
-              <p class="wallet-label">Total Discounts Given</p>
-              <p class="wallet-value" id="w-total-discounts">₹0.00K</p>
-            </div>
-          </div>
-          <div class="card wallet-kpi-card">
-            <div class="wallet-icon" style="background:rgba(16,185,129,.15);border-color:rgba(16,185,129,.3);color:#10b981;">
-              <i class="fa-solid fa-wallet"></i>
-            </div>
-            <div>
-              <p class="wallet-label">Avg Order Value</p>
-              <p class="wallet-value" id="w-avg-order">₹0.00</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Wallet Breakdown + Top Earners -->
-        <div class="wallet-grid">
-          <!-- Revenue Breakdown Bar Chart -->
-          <div class="card content-card">
-            <div class="section-header">
-              <h2><i class="fa-solid fa-chart-bar"></i> REVENUE BREAKDOWN</h2>
-              <span class="widget-sub">By Sales Rep</span>
-            </div>
-            <div class="chart-container" style="height:220px;">
-              <canvas id="walletRepChart"></canvas>
-            </div>
-          </div>
-
-          <!-- Discount vs Revenue Table -->
-          <div class="card content-card">
-            <div class="section-header">
-              <h2><i class="fa-solid fa-scale-balanced"></i> DISCOUNT vs REVENUE</h2>
-              <span class="widget-sub">Net margin view</span>
-            </div>
-            <div class="table-wrapper" style="max-height:220px;">
-              <table>
-                <thead>
-                  <tr>
-                    <th>Sales Rep</th>
-                    <th>Gross (₹)</th>
-                    <th>Discount (₹)</th>
-                    <th>Net (₹)</th>
-                  </tr>
-                </thead>
-                <tbody id="wallet-rep-table"></tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      </section>
-
     </main>
   </div>
 
-  <!-- Modal for Adding New Transaction -->
   <div id="new-sale-modal" class="modal-overlay">
     <div class="modal-card">
       <div class="modal-header">
@@ -419,39 +301,8 @@
     </div>
   </div>
 
-  <!-- Modal for API Configuration -->
-  <div id="api-config-modal" class="modal-overlay">
-    <div class="modal-card">
-      <div class="modal-header">
-        <h3><i class="fa-solid fa-sliders"></i> Supabase API Configuration</h3>
-        <button class="close-modal-btn" id="close-api-modal">&times;</button>
-      </div>
-      <form id="api-config-form" class="modal-form">
-        <div class="form-group">
-          <label>Supabase Project URL</label>
-          <input type="text" id="cfg-supabase-url" placeholder="https://your-project.supabase.co" required>
-        </div>
-        <div class="form-group">
-          <label>Anon Public Key</label>
-          <input type="text" id="cfg-supabase-key" placeholder="eyJhbGci..." required>
-        </div>
-        <div class="form-group">
-          <label>Table Name</label>
-          <input type="text" id="cfg-table-name" placeholder="orders" required>
-        </div>
-        <button type="button" class="test-conn-btn" id="test-api-btn">
-          <i class="fa-solid fa-bolt"></i> Test Connection
-        </button>
-        <div id="test-result-box" class="test-result-box"></div>
-        <div class="modal-footer">
-          <button type="button" class="btn-cancel" id="cancel-api-modal">Cancel</button>
-          <button type="submit" class="g-btn-primary">Save Configuration</button>
-        </div>
-      </form>
-    </div>
-  </div>
 
-  <!-- Modal for Logout Confirmation -->
+
   <div id="logout-modal" class="modal-overlay">
     <div class="modal-card">
       <div class="modal-header">
@@ -468,6 +319,7 @@
     </div>
   </div>
 
+  <script src="js/config.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>

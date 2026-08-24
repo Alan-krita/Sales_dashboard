@@ -16,3 +16,6 @@ Thumbs.db
 .vscode/
 .idea/
 *.log
+
+# App Config
+js/config.js
