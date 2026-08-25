@@ -320,11 +320,11 @@ async function fetchDashboardData() {
     return;
   }
 
-  const endpoint = `${SUPABASE_URL}/rest/v1/${TABLE_NAME}?select=*`;
+  const endpoint = `${SUPABASE_URL}/rest/v1/rpc/dashboard_json`;
 
   try {
     const response = await fetch(endpoint, {
-      method: "GET",
+      method: "POST",
       headers: {
         "apikey": SUPABASE_ANON_KEY,
         "Authorization": `Bearer ${SUPABASE_ANON_KEY}`,
