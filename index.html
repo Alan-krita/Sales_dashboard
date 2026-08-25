@@ -112,6 +112,10 @@
             <i class="fa-solid fa-download"></i>
           </button>
 
+          <div class="search-box date-picker-box">
+            <input type="date" id="dashboard-date-picker" class="dashboard-date-picker" title="Select Date for KPIs" style="background: transparent; border: none; color: var(--text-secondary); outline: none; font-family: inherit; font-size: 0.9rem;">
+          </div>
+
           <div class="search-box">
             <i class="fa-solid fa-magnifying-glass"></i>
             <input type="text" id="global-search-input" placeholder="Search...">
@@ -145,7 +149,7 @@
             <span class="growth-badge positive">+14.2% <i class="fa-solid fa-arrow-trend-up"></i></span>
           </div>
           <div class="kpi-info">
-            <h3>TODAY PERFORMANCE</h3>
+            <h3 id="kpi-title-1">SELECTED DATE</h3>
             <div class="metric-group">
               <p class="big-number orange-text" id="today-orders">21</p>
               <span class="metric-label">Orders</span>
@@ -163,7 +167,7 @@
             <span class="growth-badge positive">+18.5% <i class="fa-solid fa-arrow-trend-up"></i></span>
           </div>
           <div class="kpi-info">
-            <h3>JUNE MTD</h3>
+            <h3 id="kpi-title-2">SELECTED MTD</h3>
             <p class="big-number" id="mtd-orders">1024</p>
             <div class="submetric" id="mtd-revenue">₹907.51K <span class="sub-label">Revenue</span></div>
           </div>

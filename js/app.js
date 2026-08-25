@@ -2,6 +2,8 @@
 
 let dailyChartInstance = null;
 let monthlyChartInstance = null;
+window.selectedDashboardDate = null;
+window.userSelectedDate = false;
 
 document.addEventListener("DOMContentLoaded", () => {
   setupEventListeners();
@@ -118,6 +120,19 @@ function setupEventListeners() {
           document.exitFullscreen();
           fullscreenBtn.innerHTML = `<i class="fa-solid fa-expand"></i>`;
         }
+      }
+    });
+  }
+
+  const datePicker = document.getElementById("dashboard-date-picker");
+  if (datePicker) {
+    if (window.selectedDashboardDate) datePicker.value = window.selectedDashboardDate;
+    datePicker.addEventListener("change", (e) => {
+      if (e.target.value) {
+        window.selectedDashboardDate = e.target.value;
+        window.userSelectedDate = true;
+        showToast(`Dashboard KPIs updated for ${e.target.value}`, "info");
+        calculateAndRenderKPIs(filteredDataset);
       }
     });
   }
@@ -390,6 +405,16 @@ function updateDashboardUI(data, statusMessage) {
   const statusEl = document.getElementById("api-status");
   const totalCountEl = document.getElementById("total-count");
 
+  if (!window.userSelectedDate && data.length > 0) {
+    const dates = data.map(item => item.order_date_time).filter(Boolean);
+    if (dates.length > 0) {
+      dates.sort((a, b) => new Date(b) - new Date(a));
+      window.selectedDashboardDate = dates[0].slice(0, 10);
+      const dp = document.getElementById("dashboard-date-picker");
+      if (dp) dp.value = window.selectedDashboardDate;
+    }
+  }
+
   if (statusEl) {
     statusEl.innerText = statusMessage;
     if (!statusMessage.includes("Error")) statusEl.style.color = "#10b981";
@@ -460,22 +485,53 @@ function drawSparkline(canvasId, values, color) {
 
 // Calculates metrics for top 4 cards
 function calculateAndRenderKPIs(data) {
-  const todayStr = new Date().toISOString().slice(0, 10);
-  const todayRecords = data.filter(item => item.order_date_time === todayStr);
+  const targetDateStr = window.selectedDashboardDate || new Date().toISOString().slice(0, 10);
+  const targetDate = new Date(targetDateStr);
+  const targetYear = targetDate.getFullYear();
+  const targetMonth = targetDate.getMonth();
+  const targetDay = targetDate.getDate();
+
+  // Selected Date Records
+  const todayRecords = data.filter(item => item.order_date_time && item.order_date_time.startsWith(targetDateStr));
   
-  let todayOrders = todayRecords.length > 0 ? todayRecords.length : 21;
+  let todayOrders = todayRecords.length;
   let todayRevVal = todayRecords.reduce((sum, item) => sum + (parseFloat(item.amount) || 0), 0);
-  let todayRev = todayRevVal > 0 ? (todayRevVal / 1000).toFixed(2) : 16.76;
+  let todayRev = todayRevVal > 0 ? (todayRevVal / 1000).toFixed(2) : "0.00";
 
-  let mtdOrders = data.length > 0 ? data.length : 1024;
-  let totalAmount = data.reduce((sum, item) => sum + (parseFloat(item.amount) || 0), 0);
-  let mtdRev = totalAmount > 0 ? (totalAmount / 1000).toFixed(2) : 907.51;
+  // MTD Records (Month to Date relative to selected date)
+  const mtdRecords = data.filter(item => {
+    if (!item.order_date_time) return false;
+    const d = new Date(item.order_date_time);
+    return d.getFullYear() === targetYear && d.getMonth() === targetMonth && d.getDate() <= targetDay;
+  });
+  
+  let mtdOrders = mtdRecords.length;
+  let mtdRevVal = mtdRecords.reduce((sum, item) => sum + (parseFloat(item.amount) || 0), 0);
+  let mtdRev = mtdRevVal > 0 ? (mtdRevVal / 1000).toFixed(2) : "0.00";
 
-  let prevSameDayOrders = Math.round(mtdOrders * 0.9);
-  let prevSameDayRev = (mtdRev * 0.85).toFixed(2);
+  // Prev Month (Same Day) Records
+  const prevSameDayRecords = data.filter(item => {
+    if (!item.order_date_time) return false;
+    const d = new Date(item.order_date_time);
+    const expectedPrevMonth = targetMonth === 0 ? 11 : targetMonth - 1;
+    const expectedPrevYear = targetMonth === 0 ? targetYear - 1 : targetYear;
+    return d.getFullYear() === expectedPrevYear && d.getMonth() === expectedPrevMonth && d.getDate() <= targetDay;
+  });
+  let prevSameDayOrders = prevSameDayRecords.length;
+  let prevSameDayRevVal = prevSameDayRecords.reduce((sum, item) => sum + (parseFloat(item.amount) || 0), 0);
+  let prevSameDayRev = prevSameDayRevVal > 0 ? (prevSameDayRevVal / 1000).toFixed(2) : "0.00";
 
-  let prevMonthOrders = Math.round(mtdOrders * 0.94);
-  let prevMonthRev = (mtdRev * 0.90).toFixed(2);
+  // Prev Month Records (Entire previous month)
+  const prevMonthRecords = data.filter(item => {
+    if (!item.order_date_time) return false;
+    const d = new Date(item.order_date_time);
+    const expectedPrevMonth = targetMonth === 0 ? 11 : targetMonth - 1;
+    const expectedPrevYear = targetMonth === 0 ? targetYear - 1 : targetYear;
+    return d.getFullYear() === expectedPrevYear && d.getMonth() === expectedPrevMonth;
+  });
+  let prevMonthOrders = prevMonthRecords.length;
+  let prevMonthRevVal = prevMonthRecords.reduce((sum, item) => sum + (parseFloat(item.amount) || 0), 0);
+  let prevMonthRev = prevMonthRevVal > 0 ? (prevMonthRevVal / 1000).toFixed(2) : "0.00";
 
   document.getElementById("today-orders").innerText = todayOrders;
   document.getElementById("today-revenue").innerHTML = `₹${todayRev}K <span class="sub-label">Revenue</span>`;
