@@ -131,6 +131,65 @@ function setupEventListeners() {
     });
   }
 
+  const downloadBtn = document.getElementById("download-csv-btn");
+  if (downloadBtn) {
+    downloadBtn.addEventListener("click", () => {
+      if (!currentDataset || currentDataset.length === 0 || !currentDataset[0].leaderboard_metrics) {
+        showToast("No data available to download.", "error");
+        return;
+      }
+      
+      const data = currentDataset[0].leaderboard_metrics;
+      let csvContent = "data:text/csv;charset=utf-8,";
+      csvContent += "Name,Day Sales,Day Revenue,MTD Sales,MTD Revenue\n";
+      
+      data.forEach(row => {
+        const name = resolveRepName({ user_id: row.sales_representative }) || "Unknown";
+        const dayCount = row.today_sales || 0;
+        const dayRev = row.today_revenue || 0;
+        const mtdCount = row.mtd_sales || 0;
+        const mtdRev = row.mtd_revenue || 0;
+        csvContent += `${name},${dayCount},${dayRev},${mtdCount},${mtdRev}\n`;
+      });
+      
+      const encodedUri = encodeURI(csvContent);
+      const link = document.createElement("a");
+      link.setAttribute("href", encodedUri);
+      link.setAttribute("download", "sales_report.csv");
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      showToast("CSV Downloaded successfully!", "success");
+    });
+  }
+
+  const filterAllBtn = document.getElementById("filter-all");
+  const topPerformerBtn = document.getElementById("filter-target");
+  
+  if (filterAllBtn && topPerformerBtn) {
+    filterAllBtn.addEventListener("click", () => {
+      filterAllBtn.classList.add("active");
+      topPerformerBtn.classList.remove("active");
+      showToast("Showing all performers...", "info");
+      
+      if (currentDataset && currentDataset.length > 0) {
+        let metrics = currentDataset[0].leaderboard_metrics || [];
+        renderLeaderboardTable(metrics);
+      }
+    });
+
+    topPerformerBtn.addEventListener("click", () => {
+      topPerformerBtn.classList.add("active");
+      filterAllBtn.classList.remove("active");
+      showToast("Filtering top performers...", "info");
+      
+      if (currentDataset && currentDataset.length > 0) {
+        let metrics = currentDataset[0].leaderboard_metrics || [];
+        metrics = [...metrics].sort((a, b) => (b.mtd_sales || 0) - (a.mtd_sales || 0)).slice(0, 3);
+        renderLeaderboardTable(metrics);
+      }
+    });
+  }
 
 
   // Helper to setup modals
@@ -451,7 +510,7 @@ function renderLeaderboardTable(leaderboardData) {
     const fillWidth = Math.min(targetPct, 100);
     const pvMonth = Math.max(1, Math.floor(mtdCount * 0.02));
 
-    const name = rep.sales_representative || "Unknown";
+    const name = resolveRepName({ user_id: rep.sales_representative }) || "Unknown";
     const initials = name.slice(0, 2).toUpperCase();
 
     row.innerHTML = `

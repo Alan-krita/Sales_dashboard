@@ -19,9 +19,15 @@ function resolveRepName(item) {
   if (!item) return "Sales Rep";
   let val = item.created_by;
   if (!val || val === "") val = item.user_id;
+  
+  if (typeof val === "string") {
+    val = val.replace(/^User_/, "").replace(/^Rep\s+/, "").trim();
+  }
+
   if (USER_NAME_MAP[val]) return USER_NAME_MAP[val];
   if (USER_NAME_MAP[item.user_id]) return USER_NAME_MAP[item.user_id];
-  if (typeof val === "string" && isNaN(Number(val)) && val.trim().length > 0 && !val.startsWith("User_")) return val.trim();
+  
+  if (typeof val === "string" && isNaN(Number(val)) && val.trim().length > 0) return val.trim();
   if (typeof val === "number" || !isNaN(Number(val))) {
     const idNum = Math.abs(Number(val));
     const names = ["Faizan", "Talha", "Nidhi", "Bhageshri", "Sanika", "Prabhat", "Farooq", "Aarav", "Rhea", "Ananya"];
